@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, Helvetica, sans-serif; background: #fff; color: #222; display: flex; min-height: 842px; }
+  .sidebar { width: 210px; background: #1a2332; padding: 28px 18px; color: #fff; flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-start; }
+  .main    { flex: 1; padding: 32px 28px; }
+  .s-photo { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(126,184,232,.4); margin-bottom: 14px; display: block; }
+  .s-name  { font-size: 18px; font-weight: 700; color: #fff; line-height: 1.3; word-break: break-word; }
+  .s-title { font-size: 9px; color: #7eb8e8; margin-top: 5px; text-transform: uppercase; letter-spacing: .8px; }
+  .s-rule  { border: none; border-top: 1px solid rgba(255,255,255,.12); margin: 14px 0; width: 100%; }
+  .s-sec   { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #7eb8e8; margin-bottom: 8px; }
+  .s-item  { font-size: 9px; color: #aac4de; margin-bottom: 5px; word-break: break-all; }
+  .s-item strong { display: block; color: #c8dff0; font-size: 8.5px; margin-bottom: 1px; }
+  .bar-wrap { margin-bottom: 7px; width: 100%; }
+  .bar-label { font-size: 9px; color: #c8dff0; margin-bottom: 2px; }
+  .bar-bg { height: 3px; background: rgba(255,255,255,.15); border-radius: 2px; }
+  .bar-fill { height: 100%; background: #7eb8e8; border-radius: 2px; }
+  .m-sec { font-size: 13px; font-weight: 700; color: #1a2332; margin-bottom: 8px; padding-bottom: 5px; border-bottom: 2px solid #378ADD; }
+  .entry { margin-bottom: 14px; }
+  .entry-head { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 4px; }
+  .entry-name { font-size: 12px; font-weight: 700; color: #111; }
+  .entry-badge { font-size: 9px; background: #e8f1fb; color: #185FA5; padding: 2px 7px; border-radius: 3px; white-space: nowrap; }
+  .entry-sub { font-size: 10.5px; color: #666; margin-top: 2px; font-style: italic; }
+  .entry-desc { font-size: 10.5px; color: #444; margin-top: 4px; line-height: 1.5; }
+  .m-section { margin-bottom: 20px; }
+  .cv-summary { font-size: 11px; color: #555; line-height: 1.6; font-style: italic; margin-bottom: 18px; }
+</style>
+</head>
+<body>
+  <div class="sidebar">
+    {% if d.photo %}
+    <img class="s-photo" src="{{ d.photo }}" alt="Foto profilo">
+    {% endif %}
+    <div class="s-name">{{ d.name or 'Nome Cognome' }}</div>
+    {% if d.title %}<div class="s-title">{{ d.title }}</div>{% endif %}
+    <hr class="s-rule">
+    {% if d.email or d.phone or d.city or d.link %}
+    <div class="s-sec">Contatti</div>
+    {% if d.email %}<div class="s-item"><strong>Email</strong>{{ d.email }}</div>{% endif %}
+    {% if d.phone %}<div class="s-item"><strong>Telefono</strong>{{ d.phone }}</div>{% endif %}
+    {% if d.city  %}<div class="s-item"><strong>Città</strong>{{ d.city }}</div>{% endif %}
+    {% if d.link  %}<div class="s-item"><strong>Web</strong>{{ d.link }}</div>{% endif %}
+    {% endif %}
+    {% if d.skills %}
+    <hr class="s-rule">
+    <div class="s-sec">Competenze</div>
+    {% for s in d.skills %}
+    <div class="bar-wrap">
+      <div class="bar-label">{{ s }}</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:{{ range(65,92)|random }}%"></div></div>
+    </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+  <div class="main">
+    {% if d.summary %}<div class="cv-summary">{{ d.summary }}</div>{% endif %}
+    {% if d.exp %}
+    <div class="m-section">
+      <div class="m-sec">Esperienza</div>
+      {% for e in d.exp %}
+      <div class="entry">
+        <div class="entry-head">
+          <span class="entry-name">{{ e.company }}</span>
+          <span class="entry-badge">{{ e.start }}{% if e.end %}–{{ e.end }}{% endif %}</span>
+        </div>
+        {% if e.role %}<div class="entry-sub">{{ e.role }}</div>{% endif %}
+        {% if e.desc %}<div class="entry-desc">{{ e.desc }}</div>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% if d.edu %}
+    <div class="m-section">
+      <div class="m-sec">Formazione</div>
+      {% for e in d.edu %}
+      <div class="entry">
+        <div class="entry-head">
+          <span class="entry-name">{{ e.inst }}</span>
+          <span class="entry-badge">{{ e.start }}{% if e.end %}–{{ e.end }}{% endif %}</span>
+        </div>
+        {% if e.degree %}<div class="entry-sub">{{ e.degree }}</div>{% endif %}
+        {% if e.notes  %}<div class="entry-desc">{{ e.notes }}</div>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</body>
+</html>

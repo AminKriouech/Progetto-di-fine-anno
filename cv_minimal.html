@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; background: #fff; padding: 52px 58px; line-height: 1.5; }
+  .header { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 18px; margin-bottom: 20px; border-bottom: 1px solid #e0e0e0; gap: 20px; }
+  .h-left { display: flex; align-items: flex-start; gap: 18px; }
+  .cv-photo { width: 72px; height: 72px; border-radius: 4px; object-fit: cover; flex-shrink: 0; }
+  .h-left-text .name  { font-size: 30px; font-weight: 300; letter-spacing: -1px; color: #111; }
+  .h-left-text .title { font-size: 12px; color: #999; margin-top: 4px; }
+  .h-right { text-align: right; font-size: 10.5px; color: #aaa; line-height: 1.9; flex-shrink: 0; }
+  .section { margin-bottom: 22px; }
+  .sec-label { font-size: 8.5px; text-transform: uppercase; letter-spacing: 2px; color: #bbb; margin-bottom: 10px; font-weight: 400; }
+  .entry { display: grid; grid-template-columns: 120px 1fr; gap: 12px; margin-bottom: 12px; align-items: start; }
+  .e-date  { font-size: 10px; color: #bbb; padding-top: 2px; }
+  .e-name  { font-size: 12.5px; font-weight: 500; color: #111; }
+  .e-sub   { font-size: 11px; color: #999; margin-top: 2px; }
+  .e-desc  { font-size: 11px; color: #666; margin-top: 4px; line-height: 1.6; }
+  .cv-summary { font-size: 12.5px; color: #666; line-height: 1.7; }
+  .skills-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .skill { font-size: 10.5px; border: 1px solid #e0e0e0; padding: 3px 10px; color: #666; }
+  hr.sec-rule { border: none; border-top: .5px solid #eee; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+  <div class="header">
+    <div class="h-left">
+      {% if d.photo %}
+      <img class="cv-photo" src="{{ d.photo }}" alt="Foto profilo">
+      {% endif %}
+      <div class="h-left-text">
+        <div class="name">{{ d.name or 'Nome Cognome' }}</div>
+        {% if d.title %}<div class="title">{{ d.title }}</div>{% endif %}
+      </div>
+    </div>
+    <div class="h-right">
+      {% if d.email %}{{ d.email }}<br>{% endif %}
+      {% if d.phone %}{{ d.phone }}<br>{% endif %}
+      {% if d.city  %}{{ d.city  }}<br>{% endif %}
+      {% if d.link  %}{{ d.link  }}{% endif %}
+    </div>
+  </div>
+
+  {% if d.summary %}
+  <div class="section">
+    <div class="sec-label">Profilo</div>
+    <hr class="sec-rule">
+    <div class="cv-summary">{{ d.summary }}</div>
+  </div>
+  {% endif %}
+
+  {% if d.exp %}
+  <div class="section">
+    <div class="sec-label">Esperienza</div>
+    <hr class="sec-rule">
+    {% for e in d.exp %}
+    <div class="entry">
+      <div class="e-date">{{ e.start }}{% if e.end %}–{{ e.end }}{% endif %}</div>
+      <div>
+        <div class="e-name">{{ e.company }}</div>
+        {% if e.role %}<div class="e-sub">{{ e.role }}</div>{% endif %}
+        {% if e.desc %}<div class="e-desc">{{ e.desc }}</div>{% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if d.edu %}
+  <div class="section">
+    <div class="sec-label">Formazione</div>
+    <hr class="sec-rule">
+    {% for e in d.edu %}
+    <div class="entry">
+      <div class="e-date">{{ e.start }}{% if e.end %}–{{ e.end }}{% endif %}</div>
+      <div>
+        <div class="e-name">{{ e.inst }}</div>
+        {% if e.degree %}<div class="e-sub">{{ e.degree }}</div>{% endif %}
+        {% if e.notes  %}<div class="e-desc">{{ e.notes }}</div>{% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if d.skills %}
+  <div class="section">
+    <div class="sec-label">Competenze</div>
+    <hr class="sec-rule">
+    <div class="skills-list">
+      {% for s in d.skills %}<span class="skill">{{ s }}</span>{% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</body>
+</html>

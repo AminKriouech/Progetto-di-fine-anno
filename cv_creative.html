@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, Helvetica, sans-serif; color: #222; background: #fff; min-height: 842px; display: flex; flex-direction: column; }
+  .cv-header { background: linear-gradient(135deg, #6B46C1 0%, #4C2DA0 100%); padding: 30px 44px; display: flex; align-items: center; gap: 22px; }
+  .cv-photo  { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,.35); flex-shrink: 0; }
+  .cv-header-text { flex: 1; }
+  .cv-name   { font-size: 26px; font-weight: 700; color: #fff; letter-spacing: -.3px; }
+  .cv-title  { font-size: 11px; color: rgba(255,255,255,.72); margin-top: 4px; letter-spacing: .6px; }
+  .cv-contact { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 10px; color: rgba(255,255,255,.65); margin-top: 12px; }
+  .cv-body   { display: grid; grid-template-columns: 1fr 220px; flex: 1; }
+  .cv-main   { padding: 28px 36px; border-right: 1px solid #ede8ff; }
+  .cv-right  { padding: 28px 22px; background: #f9f6ff; }
+  .sec-title { font-size: 11px; font-weight: 700; color: #6B46C1; text-transform: uppercase; letter-spacing: .6px; margin-top: 20px; margin-bottom: 10px; }
+  .sec-title:first-child { margin-top: 0; }
+  .entry { margin-bottom: 14px; }
+  .entry-head { display: flex; justify-content: space-between; align-items: baseline; }
+  .entry-name { font-size: 12.5px; font-weight: 700; color: #111; }
+  .entry-date { font-size: 10px; font-weight: 600; color: #6B46C1; }
+  .entry-sub  { font-size: 11px; color: #777; margin-top: 2px; font-style: italic; }
+  .entry-desc { font-size: 11px; color: #555; margin-top: 5px; line-height: 1.5; }
+  .cv-summary { font-size: 12px; color: #555; line-height: 1.7; margin-bottom: 20px; }
+  .r-title { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: #aaa; font-weight: 500; margin-bottom: 8px; margin-top: 18px; }
+  .r-title:first-child { margin-top: 0; }
+  .r-rule { border: none; border-top: 1px solid #e0d6f5; margin-bottom: 10px; }
+  .skill-pill { display: inline-block; background: #ede8ff; color: #5B3BA5; font-size: 10.5px; padding: 4px 11px; border-radius: 20px; margin: 0 4px 6px 0; }
+  .edu-item { margin-bottom: 10px; }
+  .edu-inst { font-size: 11.5px; font-weight: 600; color: #333; }
+  .edu-deg  { font-size: 10.5px; color: #888; margin-top: 1px; }
+  .edu-date { font-size: 9.5px; color: #aaa; margin-top: 2px; }
+</style>
+</head>
+<body>
+  <div class="cv-header">
+    {% if d.photo %}
+    <img class="cv-photo" src="{{ d.photo }}" alt="Foto profilo">
+    {% endif %}
+    <div class="cv-header-text">
+      <div class="cv-name">{{ d.name or 'Nome Cognome' }}</div>
+      {% if d.title %}<div class="cv-title">{{ d.title }}</div>{% endif %}
+      {% set contact = [d.email, d.phone, d.city, d.link] | select | list %}
+      {% if contact %}<div class="cv-contact">{% for c in contact %}<span>{{ c }}</span>{% endfor %}</div>{% endif %}
+    </div>
+  </div>
+
+  <div class="cv-body">
+    <div class="cv-main">
+      {% if d.summary %}<div class="cv-summary">{{ d.summary }}</div>{% endif %}
+      {% if d.exp %}
+      <div class="sec-title">Esperienza Professionale</div>
+      {% for e in d.exp %}
+      <div class="entry">
+        <div class="entry-head">
+          <span class="entry-name">{{ e.company }}</span>
+          <span class="entry-date">{{ e.start }}{% if e.end %}–{{ e.end }}{% endif %}</span>
+        </div>
+        {% if e.role %}<div class="entry-sub">{{ e.role }}</div>{% endif %}
+        {% if e.desc %}<div class="entry-desc">{{ e.desc }}</div>{% endif %}
+      </div>
+      {% endfor %}
+      {% endif %}
+    </div>
+
+    <div class="cv-right">
+      {% if d.skills %}
+      <div class="r-title">Competenze</div>
+      <hr class="r-rule">
+      <div>{% for s in d.skills %}<span class="skill-pill">{{ s }}</span>{% endfor %}</div>
+      {% endif %}
+      {% if d.edu %}
+      <div class="r-title" style="margin-top:20px">Formazione</div>
+      <hr class="r-rule">
+      {% for e in d.edu %}
+      <div class="edu-item">
+        <div class="edu-inst">{{ e.inst }}</div>
+        {% if e.degree %}<div class="edu-deg">{{ e.degree }}</div>{% endif %}
+        <div class="edu-date">{{ e.start }}{% if e.end %}–{{ e.end }}{% endif %}</div>
+      </div>
+      {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>

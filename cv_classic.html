@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Georgia, 'Times New Roman', serif; color: #222; background: #fff; padding: 48px 52px; line-height: 1.5; }
+  .cv-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; }
+  .cv-header-text { flex: 1; }
+  .cv-photo { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; border: 2px solid #ddd; flex-shrink: 0; }
+  .cv-name { font-size: 28px; font-weight: 700; color: #111; letter-spacing: -.5px; }
+  .cv-title { font-size: 14px; color: #555; font-style: italic; margin-top: 3px; }
+  .cv-contact { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 11px; color: #777; margin-top: 8px; }
+  hr { border: none; border-top: 2px solid #111; margin: 18px 0 10px; }
+  .section { margin-bottom: 18px; }
+  .sec-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #333; margin-bottom: 6px; }
+  .sec-rule { border: none; border-top: .5px solid #ccc; margin-bottom: 10px; }
+  .entry { margin-bottom: 12px; }
+  .entry-head { display: flex; justify-content: space-between; align-items: baseline; }
+  .entry-name { font-size: 13px; font-weight: 700; color: #111; }
+  .entry-date { font-size: 10px; color: #888; }
+  .entry-sub { font-size: 12px; color: #555; font-style: italic; margin-top: 2px; }
+  .entry-desc { font-size: 11.5px; color: #444; margin-top: 5px; line-height: 1.6; }
+  .cv-summary { font-size: 12.5px; color: #555; font-style: italic; line-height: 1.7; }
+  .skills-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .skill { font-size: 11px; background: #f0f0f0; padding: 3px 10px; border-radius: 2px; color: #444; }
+</style>
+</head>
+<body>
+  <div class="cv-header">
+    <div class="cv-header-text">
+      <div class="cv-name">{{ d.name or 'Nome Cognome' }}</div>
+      {% if d.title %}<div class="cv-title">{{ d.title }}</div>{% endif %}
+      {% set contact = [d.email, d.phone, d.city, d.link] | select | list %}
+      {% if contact %}
+      <div class="cv-contact">{% for c in contact %}<span>{{ c }}</span>{% endfor %}</div>
+      {% endif %}
+    </div>
+    {% if d.photo %}
+    <img class="cv-photo" src="{{ d.photo }}" alt="Foto profilo">
+    {% endif %}
+  </div>
+  <hr>
+
+  {% if d.summary %}
+  <div class="section">
+    <div class="sec-title">Profilo</div>
+    <hr class="sec-rule">
+    <div class="cv-summary">{{ d.summary }}</div>
+  </div>
+  {% endif %}
+
+  {% if d.exp %}
+  <div class="section">
+    <div class="sec-title">Esperienza</div>
+    <hr class="sec-rule">
+    {% for e in d.exp %}
+    <div class="entry">
+      <div class="entry-head">
+        <span class="entry-name">{{ e.company }}</span>
+        <span class="entry-date">{{ e.start }}{% if e.end %} – {{ e.end }}{% endif %}</span>
+      </div>
+      {% if e.role %}<div class="entry-sub">{{ e.role }}</div>{% endif %}
+      {% if e.desc %}<div class="entry-desc">{{ e.desc }}</div>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if d.edu %}
+  <div class="section">
+    <div class="sec-title">Formazione</div>
+    <hr class="sec-rule">
+    {% for e in d.edu %}
+    <div class="entry">
+      <div class="entry-head">
+        <span class="entry-name">{{ e.inst }}</span>
+        <span class="entry-date">{{ e.start }}{% if e.end %} – {{ e.end }}{% endif %}</span>
+      </div>
+      {% if e.degree %}<div class="entry-sub">{{ e.degree }}</div>{% endif %}
+      {% if e.notes %}<div class="entry-desc">{{ e.notes }}</div>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if d.skills %}
+  <div class="section">
+    <div class="sec-title">Competenze</div>
+    <hr class="sec-rule">
+    <div class="skills-list">
+      {% for s in d.skills %}<span class="skill">{{ s }}</span>{% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</body>
+</html>
