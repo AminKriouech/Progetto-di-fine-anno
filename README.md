@@ -22,7 +22,7 @@ CV Generator è una web app sviluppata con **Flask** che permette di:
 ### 1. Clona il repository
 
 ```bash
-git clone https://github.com/TUO-USERNAME/cv_generator.git
+git clone https://github.com/AminKriouech/Progetto-di-fine-anno.git
 cd cv_generator
 ```
 
