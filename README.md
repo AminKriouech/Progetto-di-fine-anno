@@ -75,7 +75,7 @@ Prima del deploy ricordarsi di:
 - Sostituire SQLite con un database persistente (es. PostgreSQL)
 - Impostare `debug=False` in `app.py`
 
-**URL del deploy:** *da aggiornare dopo il deploy*
+**URL del deploy:** https://progetto-di-fine-anno-1.onrender.com
 
 -----
 
